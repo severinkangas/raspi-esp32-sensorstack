@@ -5,11 +5,11 @@
 
 
 // WiFi-settings
-const char *ssid = "IOTLABRA"; // Enter your WiFi name
-const char *password = "iotlabra2020";  // Enter WiFi password
+const char *ssid = "<YOUR_WIFI_SSID>"; // Enter your WiFi name
+const char *password = "<YOUR_WIFI_PASSWD>";  // Enter WiFi password
 
 // MQTT Broker-settings
-const char *mqtt_broker = "172.16.200.53";
+const char *mqtt_broker = "<MQTT_BROKER_IP>";
 const int mqtt_port = 1883;
 
 // Servo-settings
@@ -24,7 +24,7 @@ int LED = 12;
 #define DHTTYPE DHT11
 DHT dht(DHTPIN, DHTTYPE);
 
-// DHT11-timer variables and period-variable for 10 seconds
+// DHT11-timer variables
 unsigned long startMillis; 
 unsigned long currentMillis;
 const unsigned long period = 10000;
