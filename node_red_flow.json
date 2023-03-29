@@ -1,0 +1,22 @@
+[
+    {
+        "id": "9ac5606ebe3b10c0",
+        "type": "function",
+        "z": "3440dea0d96aa5d1",
+        "name": "function 2",
+        "func": "var hum = msg.payload.humidity;\nmsg.payload = hum;\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 200,
+        "wires": [
+            [
+                "ef8da156adfaa9be",
+                "9899750581d96aec"
+            ]
+        ]
+    }
+]
