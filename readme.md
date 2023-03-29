@@ -1,4 +1,4 @@
-Project for learning MQTT, NodeRed, influxDB etc. using Raspberry Pi 4 and ESP32.
+Project for learning MQTT, NodeRed, influxDB etc. using Raspberry Pi 4, ESP32 and Arduino IDE.
 
 Raspberry Pi 4:
 - MQTT-broker
