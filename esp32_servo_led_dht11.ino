@@ -2,14 +2,15 @@
 #include <DHT.h>
 #include <PubSubClient.h>
 #include <Servo.h>
+#include <Ultrasonic.h>
 
 
 // WiFi-settings
-const char *ssid = "<YOUR_WIFI_SSID>"; // Enter your WiFi name
-const char *password = "<YOUR_WIFI_PASSWD>";  // Enter WiFi password
+const char *ssid = "IOTLABRA"; // Enter your WiFi name
+const char *password = "iotlabra2020";  // Enter WiFi password
 
 // MQTT Broker-settings
-const char *mqtt_broker = "<MQTT_BROKER_IP>";
+const char *mqtt_broker = "172.16.200.53";
 const int mqtt_port = 1883;
 
 // Servo-settings
@@ -24,7 +25,7 @@ int LED = 12;
 #define DHTTYPE DHT11
 DHT dht(DHTPIN, DHTTYPE);
 
-// DHT11-timer variables
+// DHT11-timer variables and period-variable for 10 seconds
 unsigned long startMillis; 
 unsigned long currentMillis;
 const unsigned long period = 10000;
@@ -32,6 +33,13 @@ const unsigned long period = 10000;
 // WiFi and MQTT-client settings
 WiFiClient espClient;
 PubSubClient client(espClient);
+
+// Ultrasonic ranger settings
+Ultrasonic ultrasonic(26);
+unsigned long startMillisRanger; 
+unsigned long currentMillisRanger;
+const unsigned long periodRanger = 1000;
+
 
 void setup() {
   Serial.begin(115200);
@@ -63,14 +71,16 @@ void setup() {
   // subscribe to MQTT-topics
   client.subscribe("esp32/led");
   client.subscribe("esp32/servo");
+  client.subscribe("esp32/ultrasonic");
 
   // Initialize LED, DHT11 and Servo
   pinMode(LED, OUTPUT);
   dht.begin();
   servoMotor.attach(SERVO_PIN);
 
-  // Timer
+  // Timers
   startMillis = millis();
+  startMillisRanger = millis();
 }
 
 // callback-function to subscribe to topics
@@ -129,9 +139,19 @@ void dht11temp() {
   client.publish("esp32/temp", payload);
 }
 
+// Function for ultrasonicranger
+void sonicranger() {
+  int RangeInCentimeters = ultrasonic.MeasureInCentimeters(); // two measurements should keep an interval
+
+  // If distance less than 20 cm, publish to MQTT-topic
+  if (RangeInCentimeters <= 20) {
+    client.publish("esp32/ultrasonic", "alert");
+  }
+}
+
 void loop() {
 
-  // Run MQTT every loop to listen to data
+  // Run MQTT every loop to listen to topics
   client.loop();
 
   // Using timer to run dht11-function
@@ -139,5 +159,10 @@ void loop() {
   if (currentMillis - startMillis >= period){
     dht11temp();
     startMillis = currentMillis;
+  }
+  currentMillisRanger = millis(); 
+  if (currentMillisRanger - startMillisRanger >= periodRanger){
+    sonicranger();
+    startMillisRanger = currentMillisRanger;
   }
 }
