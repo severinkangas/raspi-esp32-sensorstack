@@ -3,7 +3,7 @@ Project for learning MQTT, NodeRed, influxDB etc. using Raspberry Pi 4, ESP32 an
 Raspberry Pi 4:
 - MQTT-broker
 - NodeRed
-  - IBM-cloud
+  - Upload data to IBM-cloud
   - Dashboard
     - Temperature-graph
     - Humidity-gauge
@@ -20,6 +20,3 @@ ESP32:
 - LED
 - MQTT-publisher
 - MQTT-subscriber
-
-TODO:
-Camera
