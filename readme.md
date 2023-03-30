@@ -12,6 +12,7 @@ Raspberry Pi 4:
     - Camera feed from Raspi4 camera    
   - MQTT-publisher
   - MQTT-subscriber
+  - Send alerts using WhatsApp
 - influxDB
 
 ESP32:
@@ -20,3 +21,5 @@ ESP32:
 - LED
 - MQTT-publisher
 - MQTT-subscriber
+- Ultrasonic-sensor
+- Light-sensor
