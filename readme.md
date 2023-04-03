@@ -30,6 +30,7 @@ ESP32:
 Working now:
 
 Raspi4: MQTT-broker, MQTT-publisher, MQTT-subscriber, Node-RED (IBM-Cloud, Dashboard (no camera feed), MQTT influxDB, Grafana
+
 ESP32: DHT11, Servo, LED, MQTT -things, Ultrasonic
 
 Work In Progress:
