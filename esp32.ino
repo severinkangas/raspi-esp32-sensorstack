@@ -3,14 +3,15 @@
 #include <PubSubClient.h>
 #include <Servo.h>
 #include <Ultrasonic.h>
+#include <esp_task_wdt.h>
 
 
 // WiFi-settings
-const char *ssid = "<YOUR_WIFI_SSID>"; // Enter your WiFi name
-const char *password = "<YOUR_WIFI_PASSWD>";  // Enter WiFi password
+const char *ssid = "IOTLABRA"; // Enter your WiFi name
+const char *password = "iotlabra2020";  // Enter WiFi password
 
 // MQTT Broker-settings
-const char *mqtt_broker = "<YOUR_RASPBERRY_IP>";
+const char *mqtt_broker = "172.16.200.53";
 const int mqtt_port = 1883;
 
 // Servo-settings
@@ -38,8 +39,12 @@ PubSubClient client(espClient);
 Ultrasonic ultrasonic(26);
 unsigned long startMillisRanger; 
 unsigned long currentMillisRanger;
-const unsigned long periodRanger = 1000;
+const unsigned long periodRanger = 3000;
 
+// Lightsensor timer settings
+unsigned long startMillisLight; 
+unsigned long currentMillisLight;
+const unsigned long periodLight = 30000;
 
 void setup() {
   Serial.begin(115200);
@@ -81,6 +86,7 @@ void setup() {
   // Timers
   startMillis = millis();
   startMillisRanger = millis();
+  startMillisLight = millis();
 }
 
 // callback-function to subscribe to topics
@@ -141,16 +147,31 @@ void dht11temp() {
 
 // Function for ultrasonicranger
 void sonicranger() {
-  int RangeInCentimeters = ultrasonic.MeasureInCentimeters(); // two measurements should keep an interval
+  int RangeInCentimeters = ultrasonic.MeasureInCentimeters();
 
   // If distance less than 20 cm, publish to MQTT-topic
   if (RangeInCentimeters <= 20) {
     client.publish("esp32/ultrasonic", "alert");
+    Serial.println("ALERT!");
   }
 }
 
-void loop() {
+// Function for light sensor
+void lightread() {
+  int lightvalue = analogRead(33);
+  if (lightvalue <= 100) {
+    client.publish("esp32/light", "dark");
+  }
+  if (lightvalue >= 2000) {
+    client.publish("esp32/light", "bright");
+  }
+  if (lightvalue > 100 && lightvalue < 2000) {
+    client.publish("esp32/light", "semilight");
+  }
+  Serial.println(lightvalue);
+}
 
+void loop() {
   // Run MQTT every loop to listen to topics
   client.loop();
 
@@ -160,9 +181,18 @@ void loop() {
     dht11temp();
     startMillis = currentMillis;
   }
+
+  // Using timer to run sonicranger
   currentMillisRanger = millis(); 
   if (currentMillisRanger - startMillisRanger >= periodRanger){
     sonicranger();
     startMillisRanger = currentMillisRanger;
+  }
+
+  // Using timer to run lightsensor
+  currentMillisLight = millis();
+  if (currentMillisLight - startMillisLight >= periodLight){
+    lightread();
+    startMillisLight = currentMillisLight;
   }
 }
