@@ -31,8 +31,8 @@ Working now:
 
 Raspi4: MQTT-broker, MQTT-publisher, MQTT-subscriber, Node-RED (IBM-Cloud, Dashboard (no camera feed), MQTT influxDB, Grafana
 
-ESP32: DHT11, Servo, LED, MQTT -things, Ultrasonic
+ESP32: DHT11, Servo, LED, MQTT-things, Ultrasonic, Light-sensor
 
 Work In Progress:
 
-Tutorial, camera, light-sensor
+Tutorial, camera
