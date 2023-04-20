@@ -36,3 +36,6 @@ ESP32: DHT11, Servo, LED, MQTT-things, Ultrasonic, Light-sensor
 Work In Progress:
 
 Tutorial, camera
+
+
+![alt text](https://github.com/severinkangas/raspi-esp32-sensorstack/blob/main/fritzing.png?raw=true)
